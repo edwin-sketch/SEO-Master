@@ -207,6 +207,17 @@ if (preg_match('/<h[1-6]\b|<p\b|<ul\b|<ol\b/i', $content_raw)) {
                 }
             }
             wp_update_post(array('ID'=>$post_id,'post_content'=>$content2));
+            // Final content (after images)
+$final_content = get_post_field('post_content', $post_id);
+
+// Rank Math — title/description/focus keyword
+$desc = wp_trim_words(wp_strip_all_tags($final_content), 45);
+update_post_meta($post_id,'rank_math_title',         $title.' | '.get_bloginfo('name'));
+update_post_meta($post_id,'rank_math_description',   $desc);
+$focus = $kw . ($sec_str ? (', '.$sec_str) : '');
+update_post_meta($post_id,'rank_math_focus_keyword', $focus);
+update_post_meta($post_id,'_seo_master_desc',        $desc);
+
         }
     }
 
